@@ -16,11 +16,12 @@ func Init(args []string) (error) {
 		at, _ := parsers.InitParse(args, []string{"--at", "-a"}[:])
 		at = fs.FormatDirName(at)
 		if _, err := os.Stat(at); !os.IsNotExist(err) {
-			return errors.New("(axa init) database directory: alreadry exists \n\t& database directory must be created at database creation time")
+			return errors.New("(axa err : dbi-1) database directory: already exists \n\t& database directory must be created at database creation time\n\t& axa init failed...")
 		} else {
 			_ = os.Mkdir(at, 0755)
 		}
 
+		fmt.Println("(axa init) created database directory successfuly...")
 
 		cpuCores, err := parsers.InitParse(args, []string{"--cpuCores", "-cc"}[:])
 		if err != nil {
