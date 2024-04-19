@@ -1,7 +1,7 @@
 package parsers
 
 func AxaHelp() string{
-	return "\nUsage: axa [PROGRAM] ...\nPROGRAM:\n   init		initializes database, creates the mandatory\n		files for the database\n   start	boots up database\n   stop		shuts database down\n   exec		executes axa lang code on the database"
+	return "Usage: axa [PROGRAM] ...\nPROGRAM:\n   init		initializes database, creates the mandatory\n		files for the database\n   start	boots up database server\n   stop		shuts database server down\n   exec		executes axa lang code on the database"
 }
 
 func InitHelp() string{
