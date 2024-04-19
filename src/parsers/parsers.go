@@ -14,5 +14,5 @@ func InitParse(args []string, params []string) (string, error) {
 			}
 		}
 	}
-	return "~", nil
+	return "~", errors.New("params: param not found")
 }

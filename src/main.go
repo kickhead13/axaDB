@@ -14,7 +14,10 @@ func main() {
     } else {
         switch args[0] {
         case "init":
-            axa_init.Init(args[1:])
+            err := axa_init.Init(args[1:])
+            if err != nil {
+                fmt.Println(err)
+            }
         }
     }
 }
