@@ -5,6 +5,7 @@ import (
  "axaDB/src/parsers"
  "axaDB/src/axa_init"
  "fmt"
+ "axaDB/src/dberrs"
 )
 
 func main() {
@@ -15,8 +16,8 @@ func main() {
         switch args[0] {
         case "init":
             err := axa_init.Init(args[1:])
-            if err != nil {
-                fmt.Println(err)
+            if err != dberrs.DB_NORM() {
+                fmt.Println(err.Err)
             }
         }
     }

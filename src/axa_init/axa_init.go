@@ -5,20 +5,24 @@ import (
 	"axaDB/src/parsers"
 	"axaDB/src/fs"
 	"os"
-	"errors"
+	"axaDB/src/dberrs"
+	"strings"
 )
 
-func Init(args []string) (error) {
+func Init(args []string) (dberrs.AxaErr) {
 	if len(args) == 0 {
 		fmt.Println(parsers.InitHelp())
 	} else {
 		
-		at, _ := parsers.InitParse(args, []string{"--at", "-a"}[:])
+		at, _ := parsers.InitParse(args, []string{"--at", "-@"}[:])
 		at = fs.FormatDirName(at)
 		if _, err := os.Stat(at); !os.IsNotExist(err) {
-			return errors.New("(axa err : dbi-1) database directory: already exists \n\t& database directory must be created at database creation time\n\t& axa init failed...")
+			return dberrs.DB_D01()
 		} else {
-			_ = os.Mkdir(at, 0755)
+			err = os.Mkdir(at, 0755)
+			if err != nil {
+				dberrs.DB_D02()
+			}
 		}
 
 		fmt.Println("(axa init) created database directory successfuly...")
@@ -37,9 +41,38 @@ func Init(args []string) (error) {
 		if err != nil {
 			maxDataFileSize = "1024"
 		}
-		fs.CreateInitFile(at, cpuCores, possibleBackups, maxDataFileSize)
 
+		databaseName, err := parsers.InitParse(args, []string{"--databaseName", "-dbn"}[:])
+		if err != nil {
+			databaseName = strings.Split(at, "/")[len(strings.Split(at, "/"))-2]
+		}
+		aerr := fs.CreateInitFile(at, cpuCores, possibleBackups, maxDataFileSize, databaseName)
+		if aerr != dberrs.DB_NORM() {
+			return aerr
+		}
+
+		sysPassword, err := parsers.InitParse(args, []string{"--sysPassword", "-sp"}[:])
+		if err != nil {
+			sysPassword = "veryBadPassword"
+		}
+
+		fmt.Println("(axa init) creating AXA_USERS collection...")
+		err = os.Mkdir(at + "AXA_USERS", 0755)
+		if err != nil {
+			return dberrs.DB_D03()
+		}
+
+		fmt.Println("(axa init) creating AXA_USERS default data file containing sys user info...")
+		aerr = fs.CreateUsersDefaultDataFile(at, sysPassword)
+		if aerr != dberrs.DB_NORM() {
+			return aerr
+		}
+
+		aerr = fs.CreateCollectionRulesFile(at, "AXA_USERS", map[string]string{
+			"AXA_ADMIN":"read|write|modify",
+			"#":"|",
+		})
 	}
-	return nil
+	return dberrs.DB_NORM()
 }
 
