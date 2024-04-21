@@ -8,6 +8,11 @@ import (
 	"fmt"
 )
 
+// THIS IS NOT MY CODE 
+// I OWE CREDIT TO:
+// Aziza Kasenova
+// AN TO HER ARTICLE:
+// https://medium.com/insiderengineering/aes-encryption-and-decryption-in-golang-php-and-both-with-full-codes-ceb598a34f41
 func EncryptData(data string) (string, error){
 	key := GetEnvironmentVarValue("AXADB_AES_KEY")
 	iv := GetEnvironmentVarValue("AXADB_AES_IV")
