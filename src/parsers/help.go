@@ -2,12 +2,24 @@ package parsers
 
 func AxaHelp() string{
 	return `Usage: axa [PROGRAM] ...
+
 PROGRAM:
-   init    initializes database, creates the mandatory
-           files for the database
-   start   boots up database server
-   stop    shuts database server down
-   exec    executes axa lang code on the database`
+   init              initializes database, creates the mandatory
+                     files for the database
+   start             boots up database server
+   stop              shuts database server down
+   exec              executes axa lang code on the database
+ENVIRONMENT VARIABLES:
+For the DBMS to run as it should, you will have to define two
+environment variables. These variables are incredibly important.
+They are the keys to encrypting / decrypting database data.
+LOSING / FORGETTING / CHANGING them at any time will result in
+the distruction of the integrity of your database. Be very
+careful not to LOSE / FORGET / CHANGE any of these two after they
+are set, and the database is created.
+   AXADB_AES_KEY     A.E.S. algorithm key
+   AXADB_AES_IV      A.E.S. algorithm I.V.
+   `
 }
 
 func InitHelp() string{
