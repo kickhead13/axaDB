@@ -4,14 +4,23 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 )
 
-// THIS IS NOT MY CODE 
+func SHA256EncryptPassword(password string) string{
+	hash := sha256.New()
+	hash.Write([]byte(password))
+	pass_sum := hash.Sum(nil)
+	return hex.EncodeToString(pass_sum)
+}
+
+// THE CODE BELOW WAS MORE OR LESS COPIED
 // I OWE CREDIT TO:
 // Aziza Kasenova
-// AN TO HER ARTICLE:
+// AND TO HER ARTICLE:
 // https://medium.com/insiderengineering/aes-encryption-and-decryption-in-golang-php-and-both-with-full-codes-ceb598a34f41
 func EncryptData(data string) (string, error){
 	key := GetEnvironmentVarValue("AXADB_AES_KEY")

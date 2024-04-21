@@ -3,8 +3,6 @@ package fs
 import (
 	"os"
 	"fmt"
-	"crypto/sha256"
-	"encoding/hex"
 	"axaDB/src/axa_security"
 )
 
@@ -41,13 +39,9 @@ func CreateUsersDefaultDataFile(dir string, sys_password string) dberrs.AxaErr{
 		return dberrs.DB_D05()
 	}
 
-	hash := sha256.New()
-	hash.Write([]byte(sys_password))
-	pass_sum := hash.Sum(nil)
-
 	fileContent := `{
 		"sys":{
-			"password":"`+hex.EncodeToString(pass_sum)+`",
+			"password":"`+axa_security.SHA256EncryptPassword(sys_password)+`",
 			"role":"AXA_ADMIN"
 		}
 	}`
