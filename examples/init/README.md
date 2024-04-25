@@ -1,7 +1,10 @@
 # axa init utility
 
+## Scope
+Creates database at given location on disk, with the above mentioned specifications
+
 ## Usage
-```
+```sh
 $ axa init
 Usage: axa init --at [DATABASE_DIRECTORY] [OPTIONS...]
 Initialize axaDB database at a given location on the current server's disk.
@@ -18,5 +21,3 @@ OPTIONS:
    --maxDataFileSize, -pb:   sets the maximum size a single data file can
                              have before flush (default is 1024KB)
 ```
-## Scope
-Creates database at given location on disk, with the above mentioned specifications

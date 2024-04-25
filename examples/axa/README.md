@@ -1,10 +1,10 @@
 # axa utility
 
-## Short Description
+## Scope
 The axaDB DBMS comes with a command-line utility program that is capable of managing the database. This command-line utility is simply called <b>axa</b>, and is used as follows. 
 
 ## Usage
-```
+```sh
 $ axa
 Usage: axa [PROGRAM] ...
 PROGRAM:
