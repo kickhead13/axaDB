@@ -2,10 +2,15 @@ package main
 
 import (
  "os"
+ "fmt"
+)
+
+import (
  "axaDB/src/parsers"
  "axaDB/src/axa_init"
- "fmt"
  "axaDB/src/dberrs"
+ "axaDB/src/axa_connect"
+ "axaDB/src/axa_server"
 )
 
 func main() {
@@ -19,6 +24,17 @@ func main() {
             if err != dberrs.DB_NORM() {
                 fmt.Println(err.Err)
             }
+        case "connect":
+            err := axa_connect.Connect(args[1:])
+            if err != dberrs.DB_NORM() {
+                fmt.Println(err.Err)
+            }
+        case "start":
+            err := axa_server.Start(args[1:])
+            if err != dberrs.DB_NORM() {
+                fmt.Println(err.Err)
+            }
         }
+    
     }
 }

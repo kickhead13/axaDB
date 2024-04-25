@@ -19,13 +19,18 @@ func CreateInitFile(dir string, cpuCores string, possibleBackups string, maxData
 		return dberrs.DB_D04()
 	}
 
-	f.WriteString("{")
-	f.WriteString("\n\t\"cpuCores\":" + cpuCores +",")
-	f.WriteString("\n\t\"possibleBackups\":" + possibleBackups + ",")
-	f.WriteString("\n\t\"maxDataFileSize\":" + maxDataFileSize + ",")
-	f.WriteString("\n\t\"databaseName\":\"" + databaseName + "\"")
-	f.WriteString("\n}")
+	fileContent := `{
+  		"cpuCores":"` + cpuCores +`",
+   		"possibleBackups":"` + possibleBackups +`",
+   		"maxDataFileSize":"` + maxDataFileSize + `",
+   		"databaseName":"` + databaseName + `"
+	}`
+	encryptedFileContent, err := axa_security.EncryptData(fileContent)
+	if err != nil {
+		return dberrs.DB_E01()
+	}
 
+	f.WriteString(encryptedFileContent)
 	return dberrs.DB_NORM()
 }
 

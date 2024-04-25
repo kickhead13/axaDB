@@ -18,7 +18,7 @@ func SHA256EncryptPassword(password string) string{
 }
 
 // THE CODE BELOW WAS MORE OR LESS COPIED
-// I OWE CREDIT TO:
+// I OWE MOST OF THE CREDIT FOR THIS CODE TO:
 // Aziza Kasenova
 // AND TO HER ARTICLE:
 // https://medium.com/insiderengineering/aes-encryption-and-decryption-in-golang-php-and-both-with-full-codes-ceb598a34f41

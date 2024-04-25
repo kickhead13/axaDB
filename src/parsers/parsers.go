@@ -16,3 +16,7 @@ func InitParse(args []string, params []string) (string, error) {
 	}
 	return "~", errors.New("params: param not found")
 }
+
+func ConnectParse(args []string, params []string) (string, error){
+	return InitParse(args, params)
+}
