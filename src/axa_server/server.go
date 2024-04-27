@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"bufio"
 	"io"
+	"sync"
 )
 
 import (
@@ -13,6 +14,10 @@ import (
 )
 
 func testStart(ip string, port int) {
+	var execBuffer CritBuffer = InitCritBuffer()
+	var responseBuffer CritBuffer = InitCritBuffer()
+	var wgroup sync.WaitGroup
+
 	ln, err := net.Listen("tcp", ip + ":" + strconv.Itoa(port))
 	if err != nil {
 		fmt.Println(err)
@@ -21,6 +26,9 @@ func testStart(ip string, port int) {
 
 	fmt.Println("(axa server): listening on " + ip + ":" + strconv.Itoa(port) + "...")
 	
+	wgroup.Add(1)
+	go handleExecutioner(&execBuffer, &responseBuffer, &wgroup)
+
 	for {
         conn, err := ln.Accept()
         if err != nil {
@@ -28,11 +36,13 @@ func testStart(ip string, port int) {
             continue
         }
 		fmt.Printf("(axa server): new connection: (%s)\n", conn.RemoteAddr())
-        go handleConnection(conn)
+		wgroup.Add(1)
+        go handleConnection(conn, &execBuffer, &responseBuffer, &wgroup)
     }
+	wgroup.Wait()
 }
 
-func handleConnection(conn net.Conn) {
+func handleConnection(conn net.Conn, execBuffer *CritBuffer, _ *CritBuffer, wgroup *sync.WaitGroup) {
 
     defer conn.Close()
 	wrapped_conn := bufio.NewReader(conn)
@@ -51,9 +61,11 @@ func handleConnection(conn net.Conn) {
 			return
 		}
 
+		execBuffer.push(fmt.Sprintf("%s", buff[:int(m_len)]), remoteAddr)
     	fmt.Printf("(axa server) received [ %s ] from %s \n", buff[:int(m_len)], remoteAddr)
 	}
 	fmt.Printf("(axa server): connection to %s closed...\n", remoteAddr )
+	wgroup.Done()
 }
 
 func Start(_args []string) dberrs.AxaErr{
