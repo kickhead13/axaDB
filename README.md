@@ -6,17 +6,17 @@
 
 ## Short Description
 
-A NoSQL Document-Oriented Data Base Management System written exclusively in the GO programming language. This DBMS takes some optimisational inspiration from Oracle's Oracle Database to give you the best runtime for your C.R.U.D. porgrams.
+axaDB is a NoSQL Document-Oriented Data Base Management System written exclusively in the GO programming language. This DBMS takes some optimisational inspiration from Oracle's Oracle Database to give you the best runtime for your C.R.U.D. programs.
 
 ## Speed and Security
 
-axaDB is a fast and secure DBMS that encrypts all the data of you / your clients, following the Advanced Encryption Standard (A.E.S.)
+axaDB is a fast and secure DBMS that encrypts all of your / your client's data, following the Advanced Encryption Standard (A.E.S.)
 
 ## Downloading and Installing
 
 Installing axaDB is trivial. You only need two terminal utility programs (git and go). The steps to download the DBMS are:
 
- - Clone the git repository (I'm going to use http)
+ - Clone the git repository (I'm going to use https)
 ```sh
  $ git clone "https://github.com/kickhead13/axaDB.git"
 ```
@@ -70,4 +70,22 @@ As you can see the (very important) first step is setting up the AXADB_AEX_KEY (
 *-----------------------------------------------------------*
 ```
 
-To get the help message of the init / connect / start / halt subprograms is running ```axa <subprogram>``` with no parameters.
+Now you should run
+```sh
+ $ axa init ...
+```
+to initialize your database. Then run
+```sh
+ $ axa start ...
+```
+to boot up your database. Now, multiple clients can connect to your database and run querries / execute changes into your DB, using:
+```sh
+ $ axa connect ...
+```
+When you're done / want to close your DB for maintanance you should run
+```sh
+ $ axa halt ...
+```
+
+To get the help message of the init / connect / start / halt subprograms you must run ```axa <subprogram>``` with no parameters.
+
