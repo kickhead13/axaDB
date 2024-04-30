@@ -33,3 +33,14 @@ func DB_EX04() AxaErr{
 	?    ^^^^^^^^^^^ v
 	! axa exec failed, command unexecuted`}
 }
+
+func DB_EX05() AxaErr{
+	return AxaErr{`(axa err: db-ex05) executioner: payload is not in json format
+	? possible examples:
+	?  * ... at ... {: "where is my key?"}
+	?  * ... at ... { "where is" : "my right bracket?
+	! axa exec failed, command unexecuted"`}
+}
+func DB_EX06() AxaErr{
+	return AxaErr{``}
+}

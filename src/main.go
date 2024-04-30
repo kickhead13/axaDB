@@ -3,6 +3,7 @@ package main
 import (
  "os"
  "fmt"
+ "reflect"
 )
 
 import (
@@ -11,9 +12,11 @@ import (
  "axaDB/src/dberrs"
  "axaDB/src/axa_connect"
  "axaDB/src/axa_server"
+ "axaDB/src/axa_security"
 )
 
 func main() {
+
     var args []string = os.Args[1:]
     if len(args) == 0 {
         fmt.Println(parsers.AxaHelp())        

@@ -5,54 +5,59 @@ import (
 	"math/rand/v2"
 	"sync"
 	"strings"
+	"log"
+)
+
+import (
+	"axaDB/src/fs"
 	"axaDB/src/dberrs"
 	"axaDB/src/parsers"
 )
 
 func fetch(split []string) string{
-	_, err := parsers.CollectionFromSplit(split, "from")
-	if err != dberrs.DB_NORM() {
-		return err.Err
+	_,_,_,err := fetchExecParams("from", split)
+	if err != "" {
+		return err
 	}
-
-	_, err = parsers.UrlFromSplit(split)
-	if err != dberrs.DB_NORM() {
-		return err.Err
-	}
-
 	return ""
 }
 
 func feed(split []string) string{
-	_, err := parsers.CollectionFromSplit(split, "in")
-	if err != dberrs.DB_NORM() {
-		return err.Err
+	collection, url, json, err := fetchExecParams("in", split)
+	if err != "" {
+		return err
 	}
 
-	_, err = parsers.UrlFromSplit(split)
-	if err != dberrs.DB_NORM() {
-		return err.Err
+	jsonMap, newErr := parsers.JsonMapFromString(json)
+	if newErr != nil {
+		return dberrs.DB_EX05().Err
 	}
 
-	_, err = parsers.JsonFromSplit(split)
-	if err != dberrs.DB_NORM() {
-		return err.Err
-	}
+	dataFile := fs.FindDataFileContainingKey(collection, url[0])
+	if dataFile == "" {
+		dataFile = "./" + collection + "/" + string(url[0][0]) + ".db"
 
-	return ""
+		// TODO: handle error
+		file, _ := fs.CreateFile(dataFile)
+
+		jsonMarsh := parsers.CreateFeedMarhsall(url, jsonMap)
+ 
+		ret := fs.WriteToEmptyFile(file, jsonMarsh).Err
+		file.Close()
+		return ret
+	} else {}
+
+	log.Println(dataFile)
+	
+	return "(axa executioner): feed succesful!"
 }
 
 func delete(split []string) string{
-	_, err := parsers.CollectionFromSplit(split, "from")
-	if err != dberrs.DB_NORM() {
-		return err.Err
+	_,_,_,err := fetchExecParams("from", split)
+	if err != "" {
+		return err
 	}
-
-	_, err = parsers.UrlFromSplit(split)
-	if err != dberrs.DB_NORM() {
-		return err.Err
-	}
-	return ""
+	return "(axa executioner): deletion succesful!"
 }
 
 func execute(cmds map[string]string, responseBuffer *CritBuffer) {

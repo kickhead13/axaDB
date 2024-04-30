@@ -3,11 +3,12 @@ package fs
 import (
 	"os"
 	"fmt"
-	"axaDB/src/axa_security"
+	"strings"
 )
 
 import (
 	"axaDB/src/dberrs"
+	"axaDB/src/axa_security"
 )
 
 func CreateInitFile(dir string, cpuCores string, possibleBackups string, maxDataFileSize string, databaseName string) dberrs.AxaErr{
@@ -37,7 +38,7 @@ func CreateInitFile(dir string, cpuCores string, possibleBackups string, maxData
 func CreateUsersDefaultDataFile(dir string, sys_password string) dberrs.AxaErr{
 	fmt.Println("(axa init) creating AXA_USERS collection default data file...")
 
-	datafilePath := dir+"AXA_USERS/df.db"
+	datafilePath := dir+"AXA_USERS/s.db"
 	f,err := os.Create(datafilePath)
 	defer f.Close()
 	if err != nil {
@@ -87,4 +88,59 @@ func CreateCollectionRulesFile(dir string, collection string, rules map[string]s
 	f.WriteString(encryptedFileContent)
 
 	return dberrs.DB_NORM()
+}
+
+func FindDataFileContainingKey(collection string, key string) string{
+	entries, err := os.ReadDir("./" + collection)
+    if err != nil {
+        return ""
+    }
+ 
+    for _, e := range entries {
+        if strings.Contains(strings.Replace(e.Name(), ".db", "", -1), string(key[0])) {
+			return "./" + collection + "/" + e.Name()
+		}
+    }
+	
+	return ""
+}
+
+func CreateFile(path string) (*os.File, error){
+	f, err := os.Create(path)
+	return f, err
+}
+
+func WriteToEmptyFile(file *os.File, str string) dberrs.AxaErr{
+	encryptedStr, err := axa_security.EncryptData(str)
+	if err != nil {
+		return dberrs.DB_E01()
+	}
+	file.WriteString(encryptedStr)
+	fmt.Println("(axa executioner) fed collection")
+	return dberrs.DB_NORM()
+}
+
+func WriteToUnemptyFile(dataFile string, str string, url []string) dberrs.AxaErr{
+	return dberrs.DB_NORM()
+	// TODO: handle error
+	/*fileMaster := JsonMapFromFile(dataFile)
+	head := &fileMaster[url[0]]
+
+	for _, stat := range url {
+		if head == nil {
+			return dberrs.DB_EX06()
+		}
+		head = head[stat]
+	}
+
+
+
+	for key, value := range fileMaster {
+		if key != url[0] {
+			fileMaster[key] = value
+		} else {
+			fileMaster[key] = diveInMap(&fileMaster[key])
+		}
+	}*/
+	
 }
