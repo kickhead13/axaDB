@@ -1,5 +1,7 @@
 # axaDB
 
-![Image didn't load!]{/resources/logo.png?raw=true}
+<p align="center">
+  <img src="/resources/logo.png" width=300px>
+</p>
 
 A non-relational DBMS written in GO.
