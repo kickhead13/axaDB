@@ -63,7 +63,7 @@ func diveForFetch(dataFile string, url []string) (str string) {
 	for _, el := range url {
 		retMap = retMap[el].(map[string]interface{})
 	}
-	return fmt.Sprintf("%s", retMap)
+	return parsers.StringFromJsonMap(retMap)
 }
 
 func handleUrlFetch(collection string, url []string) string{
