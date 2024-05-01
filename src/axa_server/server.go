@@ -42,7 +42,7 @@ func testStart(ip string, port int) {
 	wgroup.Wait()
 }
 
-func handleConnection(conn net.Conn, execBuffer *CritBuffer, _ *CritBuffer, wgroup *sync.WaitGroup) {
+func handleConnection(conn net.Conn, execBuffer *CritBuffer, responseBuffer *CritBuffer, wgroup *sync.WaitGroup) {
 
     defer conn.Close()
 	wrapped_conn := bufio.NewReader(conn)
@@ -63,6 +63,28 @@ func handleConnection(conn net.Conn, execBuffer *CritBuffer, _ *CritBuffer, wgro
 
 		execBuffer.push(fmt.Sprintf("%s", buff[:int(m_len)]), remoteAddr)
     	fmt.Printf("(axa server) received [ %s ] from %s \n", buff[:int(m_len)], remoteAddr)
+
+		received := false
+		var val string
+		for ! received {
+			val = responseBuffer.readValueOfKey(remoteAddr)
+			if val != "" {
+
+				fmt.Printf("(axa server) received client %s's response:\n * %s\n", remoteAddr, val)
+
+				received = true
+				m_len := byte(len(val))
+				m_buff := make([]byte, 1)
+				m_buff[0] = m_len
+
+				_, err := conn.Write(append(m_buff[:], []byte(val)...))
+				if err != nil {
+					fmt.Println(err)
+					return 
+				}	
+			}
+		}
+		
 	}
 	fmt.Printf("(axa server): connection to %s closed...\n", remoteAddr )
 	wgroup.Done()

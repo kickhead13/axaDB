@@ -12,7 +12,7 @@ type CritBuffer struct {
 
 func InitCritBuffer() CritBuffer{
 	return CritBuffer{
-		messages: map[string]string{},
+		messages: make(map[string]string),
 	}
 }
 
@@ -28,6 +28,26 @@ func (buffer *CritBuffer) read() map[string]string {
 	messages := buffer.messages
 	buffer.messages = map[string]string{}
 	return messages
+}
+
+func mDelete(pMap *map[string]string, rKey string) {
+	nMap := make(map[string]string)
+	for key, value := range *pMap {
+		if key != rKey {
+			nMap[key] = value
+		}
+	}
+	*pMap = nMap
+}
+
+func (buffer *CritBuffer) readValueOfKey(key string) string{
+	buffer.locket.Lock()
+	defer buffer.locket.Unlock()
+	if val, ok := buffer.messages[key]; ok {
+		mDelete(&buffer.messages, key)
+		return val
+	}
+	return ""
 }
 
 func (buffer *CritBuffer) print() {

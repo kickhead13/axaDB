@@ -2,6 +2,10 @@ package parsers
 
 import "axaDB/src/dberrs"
 
+import (
+	//"fmt"
+)
+
 func CollectionFromSplit(split []string, statement string) (string, dberrs.AxaErr){
 
 	var inCount bool = false
@@ -15,7 +19,9 @@ func CollectionFromSplit(split []string, statement string) (string, dberrs.AxaEr
 	}
 
 	for index, element := range split {
+		//fmt.Println(element + " " + statement)
 		if index > 0 {
+			//fmt.Println(split[index-1] + " ! " + statement)
 			if split[index-1] == statement {
 				return element, dberrs.DB_NORM()
 			}

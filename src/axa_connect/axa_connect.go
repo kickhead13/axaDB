@@ -4,6 +4,7 @@ import (
 	"net"
 	"fmt"
 	"bufio"
+	"io"
 	"os"
 )
 
@@ -22,6 +23,8 @@ func Connect(args []string) dberrs.AxaErr{
 
 	var message string
 	reader := bufio.NewReader(os.Stdin)
+	wrapped_conn := bufio.NewReader(conn)
+	buff := make([]byte, 256)
 
 	for {
 		fmt.Printf("axa exec $ ")
@@ -36,6 +39,22 @@ func Connect(args []string) dberrs.AxaErr{
 			fmt.Println(err)
 			return dberrs.DB_NORM()
 		}	
+
+
+		m_len, err := wrapped_conn.ReadByte()
+    	if err != nil {
+			conn.Close()
+			break
+    	}
+
+		_, err = io.ReadFull(wrapped_conn, buff[:int(m_len)])
+		if err != nil {
+			conn.Close()
+			return dberrs.DB_NORM()
+		}
+
+		fmt.Println(fmt.Sprintf("%s", buff[:int(m_len)]))
+
 	}
 	conn.Close()
 

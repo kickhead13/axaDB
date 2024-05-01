@@ -6,6 +6,7 @@ import (
 	"sync"
 	"strings"
 	"log"
+	"fmt"
 )
 
 import (
@@ -15,14 +16,25 @@ import (
 )
 
 func fetch(split []string) string{
-	_,_,_,err := fetchExecParams("from", split)
+
+	collection,url,_,err := fetchExecParams("from", split)
 	if err != "" {
 		return err
 	}
-	return ""
-}
 
+	if len(url) == 0 {
+		return handleNoUrlFetch(collection)
+	} 
+	return handleUrlFetch(collection, url)
+}
 func feed(split []string) string{
+	defer func() string{
+		if err := recover(); err != nil {
+			return dberrs.DB_EX06().Err
+		}
+		return ""
+	}()
+
 	collection, url, json, err := fetchExecParams("in", split)
 	if err != "" {
 		return err
@@ -33,8 +45,9 @@ func feed(split []string) string{
 		return dberrs.DB_EX05().Err
 	}
 
-	dataFile := fs.FindDataFileContainingKey(collection, url[0])
+	dataFile := fs.FindDataFileContainingKey(collection, string(url[0][0]))
 	if dataFile == "" {
+		fmt.Println("(executioner) new file")
 		dataFile = "./" + collection + "/" + string(url[0][0]) + ".db"
 
 		// TODO: handle error
@@ -45,7 +58,23 @@ func feed(split []string) string{
 		ret := fs.WriteToEmptyFile(file, jsonMarsh).Err
 		file.Close()
 		return ret
-	} else {}
+	} else {
+		fmt.Println("(executioner) not new file")
+		oldMap := fs.JsonMapFromFile(dataFile)
+		newMap := make(map[string]interface{})
+		iterMap := oldMap
+		//for _, el := range url {
+		for key, value := range iterMap {
+			if key != url[0] {
+				newMap[key] = value
+			}
+		}
+		iterMap = iterMap[url[0]].(map[string]interface{})
+		newMap[url[0]] = diveNewMap(url[1:], iterMap, jsonMap)
+
+		fs.WriteMapToFile(newMap, dataFile)
+		return fmt.Sprintf("%s", newMap)	
+	}
 
 	log.Println(dataFile)
 	

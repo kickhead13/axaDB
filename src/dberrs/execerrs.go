@@ -42,5 +42,12 @@ func DB_EX05() AxaErr{
 	! axa exec failed, command unexecuted"`}
 }
 func DB_EX06() AxaErr{
-	return AxaErr{``}
+	return AxaErr{`(axa err: db-ex06) executioner: bad feed request
+	? go panicked, can't execute command
+	! axa exec failed, command unexecuted`}
+}
+func DB_EX07() AxaErr{
+	return AxaErr{`(axa err: db-ex07) executioner: cannot find data
+	? data you are looking for doesn't seem to exist
+	! axa exec failed`}
 }

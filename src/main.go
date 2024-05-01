@@ -3,7 +3,7 @@ package main
 import (
  "os"
  "fmt"
- "reflect"
+ //"reflect"
 )
 
 import (
@@ -16,6 +16,16 @@ import (
 )
 
 func main() {
+
+    
+    str := "7DzgywhxPrwwfaXDyO0nHU38Ym2GdjjtGGQ6EQ+fro6Iqz0g9+ZNC0dqoIGlyVobDouliIrysfr1Bq9eCZZIOw=="
+    dstr, err := axa_security.DecryptData(str)
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Println(string(dstr))
+    
+
 
     var args []string = os.Args[1:]
     if len(args) == 0 {

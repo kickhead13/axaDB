@@ -93,6 +93,7 @@ func CreateCollectionRulesFile(dir string, collection string, rules map[string]s
 func FindDataFileContainingKey(collection string, key string) string{
 	entries, err := os.ReadDir("./" + collection)
     if err != nil {
+		fmt.Println(err)
         return ""
     }
  
@@ -117,30 +118,16 @@ func WriteToEmptyFile(file *os.File, str string) dberrs.AxaErr{
 	}
 	file.WriteString(encryptedStr)
 	fmt.Println("(axa executioner) fed collection")
-	return dberrs.DB_NORM()
+	return dberrs.DB_FED()
+}
+
+func WriteMapToFile(mMap map[string]interface{}, file string) {
+	_ = os.Remove(file)
+	f, _ := os.Create(file)
+	_ = WriteToEmptyFile(f, fmt.Sprintf("%s", mMap))
+	f.Close()
 }
 
 func WriteToUnemptyFile(dataFile string, str string, url []string) dberrs.AxaErr{
-	return dberrs.DB_NORM()
-	// TODO: handle error
-	/*fileMaster := JsonMapFromFile(dataFile)
-	head := &fileMaster[url[0]]
-
-	for _, stat := range url {
-		if head == nil {
-			return dberrs.DB_EX06()
-		}
-		head = head[stat]
-	}
-
-
-
-	for key, value := range fileMaster {
-		if key != url[0] {
-			fileMaster[key] = value
-		} else {
-			fileMaster[key] = diveInMap(&fileMaster[key])
-		}
-	}*/
-	
+	return dberrs.DB_NORM()	
 }
