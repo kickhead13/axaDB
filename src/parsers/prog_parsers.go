@@ -17,6 +17,17 @@ func InitParse(args []string, params []string) (string, error) {
 	return "~", errors.New("params: param not found")
 }
 
+func BoolParse(args []string, params []string) bool{
+  for _, arg := range args {
+    for _, param := range params {
+      if arg == param {
+        return true
+      }
+    }
+  }
+  return false
+}
+
 func ConnectParse(args []string, params []string) (string, error){
 	return InitParse(args, params)
 }
