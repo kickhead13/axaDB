@@ -55,7 +55,7 @@ func handleNoUrlFetch(collection string) string {
 func diveForFetch(dataFile string, url []string) (str string) {
 	defer func() {
 		if err := recover(); err != nil {
-			str = ""
+			str = dberrs.DB_EX07().Err;
 		}
 	}()
 	dfMap := fs.JsonMapFromFile(dataFile)

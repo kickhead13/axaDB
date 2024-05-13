@@ -74,8 +74,8 @@ func Init(args []string) (dberrs.AxaErr) {
 	}
 
 	aerr = fs.CreateCollectionRulesFile(at, "AXA_USERS", map[string]string{
-		"AXA_ADMIN":"read|write|modify",
-		"#":"|",
+		"AXA_ADMIN":"read.write.modify",
+		"#":".",
 	})
 
 	return dberrs.DB_NORM()

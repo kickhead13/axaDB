@@ -27,12 +27,13 @@ func fetch(split []string) string{
 	} 
 	return handleUrlFetch(collection, url)
 }
-func feed(split []string) string{
-	defer func() string{
+
+func feed(split []string) (ret string){
+	defer func() {
 		if err := recover(); err != nil {
-			return dberrs.DB_EX06().Err
+			ret = dberrs.DB_EX06().Err
 		}
-		return ""
+		ret = dberrs.DB_NORM().Err
 	}()
 
 	collection, url, json, err := fetchExecParams("in", split)
@@ -89,6 +90,10 @@ func delete(split []string) string{
 	return "(axa executioner): deletion succesful!"
 }
 
+func login(split []string) string{
+  return "(axa execution): login success"
+}
+
 func execute(cmds map[string]string, responseBuffer *CritBuffer) {
 	var response string
 	for user, cmd := range cmds {
@@ -100,6 +105,8 @@ func execute(cmds map[string]string, responseBuffer *CritBuffer) {
 			response = fetch(split[1:])
 		case "delete":
 			response = delete(split[1:])
+    case "login":
+      response = login(split[1:])
 		default:
 			response = dberrs.DB_EX01().Err
 		}
