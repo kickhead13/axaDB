@@ -48,6 +48,7 @@ func handleConnection(conn net.Conn, execBuffer *CritBuffer, responseBuffer *Cri
 	wrapped_conn := bufio.NewReader(conn)
 	buff := make([]byte, 256)
 	remoteAddr := fmt.Sprintf("%s", conn.RemoteAddr())
+  val := ""
 	for {
     	m_len, err := wrapped_conn.ReadByte()
     	if err != nil {
@@ -65,12 +66,11 @@ func handleConnection(conn net.Conn, execBuffer *CritBuffer, responseBuffer *Cri
     	fmt.Printf("(axa server) received [ %s ] from %s \n", buff[:int(m_len)], remoteAddr)
 
 		received := false
-		var val string
 		for ! received {
 			val = responseBuffer.readValueOfKey(remoteAddr)
 			if val != "" {
 
-				fmt.Printf("(axa server) received client %s's response:\n * %s\n", remoteAddr, val)
+				fmt.Printf("(axa server) received client %s's response:\n[[%d]] * %s\n", remoteAddr,len(val), val)
 
 				received = true
 				m_len := byte(len(val))
@@ -82,9 +82,12 @@ func handleConnection(conn net.Conn, execBuffer *CritBuffer, responseBuffer *Cri
 					fmt.Println(err)
 					return 
 				}	
+        
 			}
 		}
-		
+    if val == "(axa execution): login failed" {
+      break
+    }
 	}
 	fmt.Printf("(axa server): connection to %s closed...\n", remoteAddr )
 	wgroup.Done()

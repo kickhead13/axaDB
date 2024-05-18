@@ -2,6 +2,7 @@ package fs
 
 import (
 	"os"
+  "fmt"
 )
 
 import (
@@ -12,9 +13,18 @@ import (
 func JsonMapFromFile(dataFile string) map[string]interface{}{
 
 	// TODO: handle error
-	data, _ := os.ReadFile(dataFile)
-	decryptedBytes, _ := axa_security.DecryptData(string(data))
-	retMap, _ := parsers.JsonMapFromString(string(decryptedBytes))
+	data, err := os.ReadFile(dataFile)
+  if err != nil {
+    fmt.Println(err)
+  }
+	decryptedBytes, err := axa_security.DecryptData(string(data))
+  if err != nil {
+    fmt.Println(err)
+  }
+	retMap, err := parsers.JsonMapFromString(string(decryptedBytes))
+  if err != nil {
+    fmt.Println(err)
+  }
 	return retMap
 
 }

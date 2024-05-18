@@ -87,7 +87,10 @@ func Connect(args []string) dberrs.AxaErr{
 		  return dberrs.DB_NORM()
 		}
 
-		fmt.Println(fmt.Sprintf("%s", buff[:int(m_len)]))
+		fmt.Println(fmt.Sprintf("[[%d]]%s",int(m_len), buff[:int(m_len)]))
+    if fmt.Sprintf("%s", buff[:int(m_len)]) == "(axa execution): login failed" {
+      break
+    }
 	}
 	conn.Close()
 

@@ -2,11 +2,8 @@ package dberrs
 
 func DB_EX01() AxaErr{
 	return AxaErr{`(axa err: db-ex01) executioner: execution command's format is faulty
-	? execution command must start with one of these:
-		* "feed" (example: feed in users roma:{password:romaspassword,email:roma@email.com})
-		* "fetch" (example: fetch from users roma)
-		* "delete" (example: delete from users roma)
-	! axa exec failed, command unexecuted`}
+  ? consult the documentation for execution commands: https://github.com/kickhead13/axaDB
+  ! axa exec failed, command unexecuted`}
 }
 
 func DB_EX02(statement string) AxaErr{

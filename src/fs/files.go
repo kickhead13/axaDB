@@ -74,7 +74,7 @@ func CreateCollectionRulesFile(dir string, collection string, rules map[string]s
 	}
 	fileContent += "\n}"
 
-	datafilePath := dir+collection+"/rules.db"
+	datafilePath := dir+collection+"/rules.axa"
 	f,err := os.Create(datafilePath)
 	defer f.Close()
 	if err != nil {
@@ -92,16 +92,15 @@ func CreateCollectionRulesFile(dir string, collection string, rules map[string]s
 
 func FindDataFileContainingKey(collection string, key string) string{
 	entries, err := os.ReadDir("./" + collection)
-    if err != nil {
-		fmt.Println(err)
-        return ""
+  if err != nil {
+	fmt.Println(err)
+    return ""
+  } 
+  for _, e := range entries {
+    if strings.Contains(strings.Replace(e.Name(), ".db", "", -1), string(key[0])) && strings.Contains(e.Name(), ".db"){
+      return "./" + collection + "/" + e.Name()
     }
- 
-    for _, e := range entries {
-        if strings.Contains(strings.Replace(e.Name(), ".db", "", -1), string(key[0])) {
-			return "./" + collection + "/" + e.Name()
-		}
-    }
+  }
 	
 	return ""
 }

@@ -23,6 +23,7 @@ func main() {
   if err != nil {
     fmt.Println(err)
   }
+  fmt.Println("what")
   fmt.Println(string(dstr))
   var args []string = os.Args[1:]
   if program := parsers.BoolParse(args, []string{"start", "init", "connect", "halt"}); !program {
