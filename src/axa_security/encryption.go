@@ -58,14 +58,19 @@ func PKCS5UnPadding(src []byte) []byte {
 	length := len(src)
 	unpadding := int(src[length-1])
 
+  //fmt.Println(length, unpadding)
+
 	return src[:(length - unpadding)]
 }
 
 func DecryptData(encrypted string) ([]byte, error){
 	key := GetEnvironmentVarValue("AXADB_AES_KEY")
 	iv := GetEnvironmentVarValue("AXADB_AES_IV")
+  
 
 	ciphertext, err := base64.StdEncoding.DecodeString(encrypted)
+
+  fmt.Println(string(ciphertext))
 
 	if err != nil {
 		return nil, err
@@ -83,7 +88,8 @@ func DecryptData(encrypted string) ([]byte, error){
 
 	mode := cipher.NewCBCDecrypter(block, []byte(iv))
 	mode.CryptBlocks(ciphertext, ciphertext)
-	ciphertext = PKCS5UnPadding(ciphertext)
+	fmt.Println(string(ciphertext))
+  ciphertext = PKCS5UnPadding(ciphertext)
 
 	return ciphertext, nil
 }

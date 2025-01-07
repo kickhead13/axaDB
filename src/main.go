@@ -12,19 +12,12 @@ import (
  "axaDB/src/dberrs"
  "axaDB/src/axa_connect"
  "axaDB/src/axa_server"
- "axaDB/src/axa_security"
+ //"axaDB/src/axa_security"
 )
 
 func main() {
 
     
-  str := "7DzgywhxPrwwfaXDyO0nHU38Ym2GdjjtGGQ6EQ+fro6Iqz0g9+ZNC0dqoIGlyVobDouliIrysfr1Bq9eCZZIOw=="
-  dstr, err := axa_security.DecryptData(str)
-  if err != nil {
-    fmt.Println(err)
-  }
-  fmt.Println("what")
-  fmt.Println(string(dstr))
   var args []string = os.Args[1:]
   if program := parsers.BoolParse(args, []string{"start", "init", "connect", "halt"}); !program {
     if help := parsers.BoolParse(args, []string{"-h", "--help"}); help {
